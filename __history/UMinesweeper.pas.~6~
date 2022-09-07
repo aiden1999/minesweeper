@@ -1,0 +1,129 @@
+unit UMinesweeper;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
+  System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.Grids, Vcl.StdCtrls;
+
+type
+  TMinesweeper = class(TForm)
+    LabelMinesLeft: TLabel;
+    LabelMinesLeftValue: TLabel;
+    LabelSquaresLeft: TLabel;
+    LabelSquaresLeftValue: TLabel;
+    StringGrid: TStringGrid;
+    ButtonFlag: TButton;
+    ButtonReveal: TButton;
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    MinesLeft, SquaresLeft: integer;
+  end;
+
+var
+  Minesweeper: TMinesweeper;
+
+implementation
+
+{$R *.dfm}
+
+procedure TMinesweeper.FormCreate(Sender: TObject);
+var
+  Row, Column, MinesLeft: integer;
+  I, CellTotal: integer;
+begin
+  MinesLeft := 100;
+  LabelMinesLeftValue.Caption := inttostr(MinesLeft);
+  SquaresLeft := 900;
+  LabelSquaresLeftValue.Caption := inttostr(SquaresLeft);
+  // MINE GENERATION
+  for I := 1 to 900 do
+  begin
+    if MinesLeft = 0 then
+      MinesLeft := 0;
+    if MinesLeft > 0 then
+    begin
+      Row := random(30);
+      Column := random(30);
+      if StringGrid.Cells[Row, Column] <> 'm' then
+      begin
+        MinesLeft := MinesLeft - 1;
+        StringGrid.Cells[Row, Column] := 'm';
+      end;
+    end;
+  end;
+  // NUMBERS ASSIGNMENT
+  for Row := 0 to 29 do
+  begin
+    for Column := 0 to 29 do
+    begin
+      CellTotal := 0;
+      if (Row <> 0) and (Column <> 0) then
+      begin
+        if StringGrid.Cells[Row - 1, Column - 1] = 'm' then
+          CellTotal := CellTotal + 1;
+        if StringGrid.Cells[Row - 1, Column] = 'm' then
+          CellTotal := CellTotal + 1;
+        if StringGrid.Cells[Row - 1, Column + 1] = 'm' then
+          CellTotal := CellTotal + 1;
+        if StringGrid.Cells[Row, Column - 1] = 'm' then
+          CellTotal := CellTotal + 1;
+        if StringGrid.Cells[Row, Column + 1] = 'm' then
+          CellTotal := CellTotal + 1;
+        if StringGrid.Cells[Row + 1, Column - 1] = 'm' then
+          CellTotal := CellTotal + 1;
+        if StringGrid.Cells[Row + 1, Column] = 'm' then
+          CellTotal := CellTotal + 1;
+        if StringGrid.Cells[Row + 1, Column + 1] = 'm' then
+          CellTotal := CellTotal + 1;
+      end;
+      if (Row = 0) and (Column <> 0) then
+      begin
+        if StringGrid.Cells[Row, Column - 1] = 'm' then
+          CellTotal := CellTotal + 1;
+        if StringGrid.Cells[Row, Column + 1] = 'm' then
+          CellTotal := CellTotal + 1;
+        if StringGrid.Cells[Row + 1, Column - 1] = 'm' then
+          CellTotal := CellTotal + 1;
+        if StringGrid.Cells[Row + 1, Column] = 'm' then
+          CellTotal := CellTotal + 1;
+        if StringGrid.Cells[Row + 1, Column + 1] = 'm' then
+          CellTotal := CellTotal + 1;
+      end;
+      if (Row <> 0) and (Column = 0) then
+      begin
+        if StringGrid.Cells[Row - 1, Column] = 'm' then
+          CellTotal := CellTotal + 1;
+        if StringGrid.Cells[Row - 1, Column + 1] = 'm' then
+          CellTotal := CellTotal + 1;
+        if StringGrid.Cells[Row, Column + 1] = 'm' then
+          CellTotal := CellTotal + 1;
+        if StringGrid.Cells[Row + 1, Column] = 'm' then
+          CellTotal := CellTotal + 1;
+        if StringGrid.Cells[Row + 1, Column + 1] = 'm' then
+          CellTotal := CellTotal + 1;
+      end;
+      if (Row = 0) and (Column = 0) then
+      begin
+        if StringGrid.Cells[Row, Column + 1] = 'm' then
+          CellTotal := CellTotal + 1;
+        if StringGrid.Cells[Row + 1, Column] = 'm' then
+          CellTotal := CellTotal + 1;
+        if StringGrid.Cells[Row + 1, Column + 1] = 'm' then
+          CellTotal := CellTotal + 1;
+      end;
+      if CellTotal <> 0 then
+      begin
+        if StringGrid.Cells[Row, Column] <> 'm' then
+          StringGrid.Cells[Row, Column] := inttostr(CellTotal);
+      end;
+    end;
+  end;
+
+end;
+
+end.

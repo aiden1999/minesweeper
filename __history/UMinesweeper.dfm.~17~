@@ -1,0 +1,163 @@
+object Minesweeper: TMinesweeper
+  Left = 507
+  Top = 175
+  Caption = 'Minesweeper'
+  ClientHeight = 683
+  ClientWidth = 649
+  Color = clActiveCaption
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poDesigned
+  OnCreate = FormCreate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object LabelMinesLeft: TLabel
+    Left = 8
+    Top = 8
+    Width = 56
+    Height = 15
+    Caption = 'Mines Left'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Comic Sans MS'
+    Font.Style = []
+    ParentFont = False
+  end
+  object LabelMinesLeftValue: TLabel
+    Left = 70
+    Top = 8
+    Width = 7
+    Height = 15
+    Caption = 'x'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Comic Sans MS'
+    Font.Style = []
+    ParentFont = False
+  end
+  object LabelSquaresLeft: TLabel
+    Left = 136
+    Top = 8
+    Width = 61
+    Height = 13
+    Caption = 'Squares Left'
+  end
+  object LabelSquaresLeftValue: TLabel
+    Left = 203
+    Top = 8
+    Width = 6
+    Height = 13
+    Caption = 'x'
+  end
+  object WinLoseLabel: TLabel
+    Left = 328
+    Top = 8
+    Width = 65
+    Height = 13
+    Caption = 'WinLoseLabel'
+    Visible = False
+  end
+  object StringGrid: TStringGrid
+    Left = 8
+    Top = 39
+    Width = 633
+    Height = 636
+    Color = clBlack
+    ColCount = 30
+    DefaultColWidth = 20
+    DefaultRowHeight = 20
+    FixedColor = clBlack
+    FixedCols = 0
+    RowCount = 30
+    FixedRows = 0
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Segoe UI Emoji'
+    Font.Style = []
+    GradientEndColor = clBlack
+    GradientStartColor = clBlack
+    ParentFont = False
+    TabOrder = 0
+    OnClick = StringGridOnClick
+    OnDblClick = StringGridOnDblClick
+    ColWidths = (
+      20
+      20
+      20
+      20
+      20
+      20
+      20
+      20
+      20
+      20
+      20
+      20
+      20
+      20
+      20
+      20
+      20
+      20
+      20
+      20
+      20
+      20
+      20
+      20
+      20
+      20
+      20
+      20
+      20
+      20)
+    RowHeights = (
+      20
+      20
+      20
+      20
+      20
+      20
+      20
+      20
+      20
+      20
+      20
+      20
+      20
+      20
+      20
+      20
+      20
+      20
+      20
+      20
+      20
+      20
+      20
+      20
+      20
+      20
+      20
+      20
+      20
+      20)
+  end
+  object OKButton: TButton
+    Left = 399
+    Top = 3
+    Width = 75
+    Height = 25
+    Caption = 'OK'
+    TabOrder = 1
+    Visible = False
+    OnClick = FormCreate
+  end
+end

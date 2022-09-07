@@ -1,0 +1,397 @@
+unit UMinesweeper;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
+  System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.Grids, Vcl.StdCtrls,
+  System.ImageList, Vcl.ImgList, Vcl.Menus;
+
+type
+  TMinesweeper = class(TForm)
+    LabelMinesLeft: TLabel;
+    LabelMinesLeftValue: TLabel;
+    LabelSquaresLeft: TLabel;
+    LabelSquaresLeftValue: TLabel;
+    StringGrid: TStringGrid;
+    procedure FormCreate(Sender: TObject);
+    procedure StringGridOnClick(Sender: TObject);
+    procedure StringGridOnDblClick(Sender: TObject);
+  private
+    { Private declarations }
+    procedure CellValuesAssign(var MinesValuesChar: char);
+    procedure TextColourChange(var CellValue: char);
+  public
+    { Public declarations }
+    MinesLeft, SquaresLeft, Row, Column: Integer;
+    FlagButton: Boolean;
+    MinesValues: array [0 .. 29, 0 .. 29] of char;
+    MinesValuesChar: char;
+
+  end;
+
+var
+  Minesweeper: TMinesweeper;
+
+implementation
+
+{$R *.dfm}
+
+procedure TMinesweeper.StringGridOnDblClick(Sender: TObject);
+var
+  CellValue: string;
+  RowCheck, ColumnCheck: Integer;
+begin
+  SquaresLeft := SquaresLeft - 1;
+  LabelSquaresLeftValue.Caption := inttostr(SquaresLeft);
+  Row := StringGrid.Row;
+  Column := StringGrid.Col;
+  MinesValuesChar := MinesValues[Column, Row];
+  CellValuesAssign(MinesValuesChar);
+  CellValue := MinesValuesChar;
+  StringGrid.Cells[Column, Row] := CellValue;
+  if CellValue = ' ' then
+  begin
+    ColumnCheck := Column;
+    RowCheck := Row;
+    begin
+      if (ColumnCheck <> 0) and (RowCheck <> 0) then
+      begin
+        if StringGrid.Cells[ColumnCheck - 1, RowCheck - 1] = '#' then
+        begin
+          MinesValuesChar := MinesValues[ColumnCheck - 1, RowCheck - 1];
+          CellValuesAssign(MinesValuesChar);
+          CellValue := MinesValuesChar;
+          StringGrid.Cells[ColumnCheck - 1, RowCheck - 1] := CellValue;
+        end;
+        if StringGrid.Cells[ColumnCheck - 1, RowCheck] = '#' then
+        begin
+          MinesValuesChar := MinesValues[ColumnCheck - 1, RowCheck];
+          CellValuesAssign(MinesValuesChar);
+          CellValue := MinesValuesChar;
+          StringGrid.Cells[ColumnCheck - 1, RowCheck] := CellValue;
+        end;
+        if StringGrid.Cells[ColumnCheck - 1, RowCheck + 1] = '#' then
+        begin
+          MinesValuesChar := MinesValues[ColumnCheck - 1, RowCheck + 1];
+          CellValuesAssign(MinesValuesChar);
+          CellValue := MinesValuesChar;
+          StringGrid.Cells[ColumnCheck - 1, RowCheck + 1] := CellValue;
+        end;
+        if StringGrid.Cells[ColumnCheck, RowCheck - 1] = '#' then
+        begin
+          MinesValuesChar := MinesValues[ColumnCheck, RowCheck - 1];
+          CellValuesAssign(MinesValuesChar);
+          CellValue := MinesValuesChar;
+          StringGrid.Cells[ColumnCheck, RowCheck - 1] := CellValue;
+        end;
+        if StringGrid.Cells[ColumnCheck, RowCheck + 1] = '#' then
+        begin
+          MinesValuesChar := MinesValues[ColumnCheck, RowCheck + 1];
+          CellValuesAssign(MinesValuesChar);
+          CellValue := MinesValuesChar;
+          StringGrid.Cells[ColumnCheck, RowCheck + 1] := CellValue;
+        end;
+        if StringGrid.Cells[ColumnCheck + 1, RowCheck - 1] = '#' then
+        begin
+          MinesValuesChar := MinesValues[ColumnCheck + 1, RowCheck - 1];
+          CellValuesAssign(MinesValuesChar);
+          CellValue := MinesValuesChar;
+          StringGrid.Cells[ColumnCheck + 1, RowCheck - 1] := CellValue;
+        end;
+        if StringGrid.Cells[ColumnCheck + 1, RowCheck] = '#' then
+        begin
+          MinesValuesChar := MinesValues[ColumnCheck + 1, RowCheck];
+          CellValuesAssign(MinesValuesChar);
+          CellValue := MinesValuesChar;
+          StringGrid.Cells[ColumnCheck + 1, RowCheck] := CellValue;
+        end;
+        if StringGrid.Cells[ColumnCheck + 1, RowCheck + 1] = '#' then
+        begin
+          MinesValuesChar := MinesValues[ColumnCheck + 1, RowCheck + 1];
+          CellValuesAssign(MinesValuesChar);
+          CellValue := MinesValuesChar;
+          StringGrid.Cells[ColumnCheck + 1, RowCheck + 1] := CellValue;
+        end;
+      end;
+      if (ColumnCheck = 0) and (RowCheck <> 0) then
+      begin
+        if StringGrid.Cells[ColumnCheck, RowCheck - 1] = '#' then
+        begin
+          MinesValuesChar := MinesValues[ColumnCheck, RowCheck - 1];
+          CellValuesAssign(MinesValuesChar);
+          CellValue := MinesValuesChar;
+          StringGrid.Cells[ColumnCheck, RowCheck - 1] := CellValue;
+        end;
+        if StringGrid.Cells[ColumnCheck, RowCheck + 1] = '#' then
+        begin
+          MinesValuesChar := MinesValues[ColumnCheck, RowCheck + 1];
+          CellValuesAssign(MinesValuesChar);
+          CellValue := MinesValuesChar;
+          StringGrid.Cells[ColumnCheck, RowCheck + 1] := CellValue;
+        end;
+        if StringGrid.Cells[ColumnCheck + 1, RowCheck - 1] = '#' then
+        begin
+          MinesValuesChar := MinesValues[ColumnCheck + 1, RowCheck - 1];
+          CellValuesAssign(MinesValuesChar);
+          CellValue := MinesValuesChar;
+          StringGrid.Cells[ColumnCheck + 1, RowCheck - 1] := CellValue;
+        end;
+        if StringGrid.Cells[ColumnCheck + 1, RowCheck] = '#' then
+        begin
+          MinesValuesChar := MinesValues[ColumnCheck + 1, RowCheck];
+          CellValuesAssign(MinesValuesChar);
+          CellValue := MinesValuesChar;
+          StringGrid.Cells[ColumnCheck + 1, RowCheck] := CellValue;
+        end;
+        if StringGrid.Cells[ColumnCheck + 1, RowCheck + 1] = '#' then
+        begin
+          MinesValuesChar := MinesValues[ColumnCheck + 1, RowCheck + 1];
+          CellValuesAssign(MinesValuesChar);
+          CellValue := MinesValuesChar;
+          StringGrid.Cells[ColumnCheck + 1, RowCheck + 1] := CellValue;
+        end;
+      end;
+      if (ColumnCheck <> 0) and (RowCheck = 0) then
+      begin
+        if StringGrid.Cells[ColumnCheck - 1, RowCheck] = '#' then
+        begin
+          MinesValuesChar := MinesValues[ColumnCheck - 1, RowCheck];
+          CellValuesAssign(MinesValuesChar);
+          CellValue := MinesValuesChar;
+          StringGrid.Cells[ColumnCheck - 1, RowCheck] := CellValue;
+        end;
+        if StringGrid.Cells[ColumnCheck - 1, RowCheck + 1] = '#' then
+        begin
+          MinesValuesChar := MinesValues[ColumnCheck - 1, RowCheck + 1];
+          CellValuesAssign(MinesValuesChar);
+          CellValue := MinesValuesChar;
+          StringGrid.Cells[ColumnCheck - 1, RowCheck + 1] := CellValue;
+        end;
+        if StringGrid.Cells[ColumnCheck, RowCheck + 1] = '#' then
+        begin
+          MinesValuesChar := MinesValues[ColumnCheck, RowCheck + 1];
+          CellValuesAssign(MinesValuesChar);
+          CellValue := MinesValuesChar;
+          StringGrid.Cells[ColumnCheck, RowCheck + 1] := CellValue;
+        end;
+        if StringGrid.Cells[ColumnCheck + 1, RowCheck] = '#' then
+        begin
+          MinesValuesChar := MinesValues[ColumnCheck + 1, RowCheck];
+          CellValuesAssign(MinesValuesChar);
+          CellValue := MinesValuesChar;
+          StringGrid.Cells[ColumnCheck + 1, RowCheck] := CellValue;
+        end;
+        if StringGrid.Cells[ColumnCheck + 1, RowCheck + 1] = '#' then
+        begin
+          MinesValuesChar := MinesValues[ColumnCheck + 1, RowCheck + 1];
+          CellValuesAssign(MinesValuesChar);
+          CellValue := MinesValuesChar;
+          StringGrid.Cells[ColumnCheck + 1, RowCheck + 1] := CellValue;
+        end;
+      end;
+      if (ColumnCheck = 0) and (RowCheck = 0) then
+      begin
+        if StringGrid.Cells[ColumnCheck, RowCheck + 1] = '#' then
+        begin
+          MinesValuesChar := MinesValues[ColumnCheck, RowCheck + 1];
+          CellValuesAssign(MinesValuesChar);
+          CellValue := MinesValuesChar;
+          StringGrid.Cells[ColumnCheck, RowCheck + 1] := CellValue;
+        end;
+        if StringGrid.Cells[ColumnCheck + 1, RowCheck] = '#' then
+        begin
+          MinesValuesChar := MinesValues[ColumnCheck + 1, RowCheck];
+          CellValuesAssign(MinesValuesChar);
+          CellValue := MinesValuesChar;
+          StringGrid.Cells[ColumnCheck + 1, RowCheck] := CellValue;
+        end;
+        if StringGrid.Cells[ColumnCheck + 1, RowCheck + 1] = '#' then
+        begin
+          MinesValuesChar := MinesValues[ColumnCheck + 1, RowCheck + 1];
+          CellValuesAssign(MinesValuesChar);
+          CellValue := MinesValuesChar;
+          StringGrid.Cells[ColumnCheck + 1, RowCheck + 1] := CellValue;
+        end;
+      end;
+    end;
+  end;
+end;
+
+procedure TMinesweeper.StringGridOnClick(Sender: TObject);
+begin
+  Row := StringGrid.Row;
+  Column := StringGrid.Col;
+  StringGrid.Cells[Column, Row] := 'F'
+end;
+
+procedure TMinesweeper.CellValuesAssign(var MinesValuesChar: char);
+var
+  CellValue: char;
+begin
+  if MinesValuesChar = 'o' then
+    CellValue := ' ';
+  if MinesValuesChar = 'a' then
+    CellValue := '1';
+  if MinesValuesChar = 'b' then
+    CellValue := '2';
+  if MinesValuesChar = 'c' then
+    CellValue := '3';
+  if MinesValuesChar = 'd' then
+    CellValue := '4';
+  if MinesValuesChar = 'e' then
+    CellValue := '5';
+  if MinesValuesChar = 'f' then
+    CellValue := '6';
+  if MinesValuesChar = 'g' then
+    CellValue := '7';
+  if MinesValuesChar = 'h' then
+    CellValue := '8';
+  if MinesValuesChar = 'm' then
+    CellValue := 'M';
+  MinesValuesChar := CellValue;
+end;
+
+procedure TextColourChange(var CellValue: char);
+begin
+if CellValue = '1' then
+
+
+end;
+
+procedure TMinesweeper.FormCreate(Sender: TObject);
+var
+  Row, Column, MinesLeft, I, CellTotal: Integer;
+  ArrayValue: char;
+begin
+  MinesLeft := 100;
+  LabelMinesLeftValue.Caption := inttostr(MinesLeft);
+  SquaresLeft := 900;
+  LabelSquaresLeftValue.Caption := inttostr(SquaresLeft);
+  FlagButton := false;
+  // MINE GENERATION
+  for I := 1 to 900 do
+  begin
+    if MinesLeft = 0 then
+      MinesLeft := 0;
+    if MinesLeft > 0 then
+    begin
+      Row := random(30);
+      Column := random(30);
+      if StringGrid.Cells[Column, Row] <> 'm' then
+      begin
+        MinesLeft := MinesLeft - 1;
+        StringGrid.Cells[Column, Row] := 'm';
+      end;
+    end;
+  end;
+  // NUMBERS ASSIGNMENT
+  for Column := 0 to 29 do
+  begin
+    for Row := 0 to 29 do
+    begin
+      CellTotal := 0;
+      if (Column <> 0) and (Row <> 0) then
+      begin
+        if StringGrid.Cells[Column - 1, Row - 1] = 'm' then
+          CellTotal := CellTotal + 1;
+        if StringGrid.Cells[Column - 1, Row] = 'm' then
+          CellTotal := CellTotal + 1;
+        if StringGrid.Cells[Column - 1, Row + 1] = 'm' then
+          CellTotal := CellTotal + 1;
+        if StringGrid.Cells[Column, Row - 1] = 'm' then
+          CellTotal := CellTotal + 1;
+        if StringGrid.Cells[Column, Row + 1] = 'm' then
+          CellTotal := CellTotal + 1;
+        if StringGrid.Cells[Column + 1, Row - 1] = 'm' then
+          CellTotal := CellTotal + 1;
+        if StringGrid.Cells[Column + 1, Row] = 'm' then
+          CellTotal := CellTotal + 1;
+        if StringGrid.Cells[Column + 1, Row + 1] = 'm' then
+          CellTotal := CellTotal + 1;
+      end;
+      if (Column = 0) and (Row <> 0) then
+      begin
+        if StringGrid.Cells[Column, Row - 1] = 'm' then
+          CellTotal := CellTotal + 1;
+        if StringGrid.Cells[Column, Row + 1] = 'm' then
+          CellTotal := CellTotal + 1;
+        if StringGrid.Cells[Column + 1, Row - 1] = 'm' then
+          CellTotal := CellTotal + 1;
+        if StringGrid.Cells[Column + 1, Row] = 'm' then
+          CellTotal := CellTotal + 1;
+        if StringGrid.Cells[Column + 1, Row + 1] = 'm' then
+          CellTotal := CellTotal + 1;
+      end;
+      if (Column <> 0) and (Row = 0) then
+      begin
+        if StringGrid.Cells[Column - 1, Row] = 'm' then
+          CellTotal := CellTotal + 1;
+        if StringGrid.Cells[Column - 1, Row + 1] = 'm' then
+          CellTotal := CellTotal + 1;
+        if StringGrid.Cells[Column, Row + 1] = 'm' then
+          CellTotal := CellTotal + 1;
+        if StringGrid.Cells[Column + 1, Row] = 'm' then
+          CellTotal := CellTotal + 1;
+        if StringGrid.Cells[Column + 1, Row + 1] = 'm' then
+          CellTotal := CellTotal + 1;
+      end;
+      if (Column = 0) and (Row = 0) then
+      begin
+        if StringGrid.Cells[Column, Row + 1] = 'm' then
+          CellTotal := CellTotal + 1;
+        if StringGrid.Cells[Column + 1, Row] = 'm' then
+          CellTotal := CellTotal + 1;
+        if StringGrid.Cells[Column + 1, Row + 1] = 'm' then
+          CellTotal := CellTotal + 1;
+      end;
+      if CellTotal <> 0 then
+      begin
+        if StringGrid.Cells[Column, Row] <> 'm' then
+          StringGrid.Cells[Column, Row] := inttostr(CellTotal);
+      end;
+    end;
+  end;
+
+  // CREATION OF ARRAY
+  for Row := 0 to 29 do
+  begin
+    for Column := 0 to 29 do
+    begin
+      if StringGrid.Cells[Column, Row] = '' then
+        ArrayValue := 'o';
+      if StringGrid.Cells[Column, Row] = '1' then
+        ArrayValue := 'a';
+      if StringGrid.Cells[Column, Row] = '2' then
+        ArrayValue := 'b';
+      if StringGrid.Cells[Column, Row] = '3' then
+        ArrayValue := 'c';
+      if StringGrid.Cells[Column, Row] = '4' then
+        ArrayValue := 'd';
+      if StringGrid.Cells[Column, Row] = '5' then
+        ArrayValue := 'e';
+      if StringGrid.Cells[Column, Row] = '6' then
+        ArrayValue := 'f';
+      if StringGrid.Cells[Column, Row] = '7' then
+        ArrayValue := 'g';
+      if StringGrid.Cells[Column, Row] = '8' then
+        ArrayValue := 'h';
+      if StringGrid.Cells[Column, Row] = 'm' then
+        ArrayValue := 'm';
+      MinesValues[Column, Row] := ArrayValue;
+    end;
+  end;
+
+  // 'HIDING' VALUES FROM CELLS
+  for Row := 0 to 29 do
+  begin
+    for Column := 0 to 29 do
+    begin
+      StringGrid.Cells[Column, Row] := '#';
+    end;
+  end;
+
+end;
+
+end.

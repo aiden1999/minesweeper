@@ -1,0 +1,137 @@
+object Minesweeper: TMinesweeper
+  Left = 0
+  Top = 0
+  Caption = 'Minesweeper'
+  ClientHeight = 683
+  ClientWidth = 649
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  OnCreate = FormCreate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object LabelMinesLeft: TLabel
+    Left = 8
+    Top = 8
+    Width = 49
+    Height = 13
+    Caption = 'Mines Left'
+  end
+  object LabelMinesLeftValue: TLabel
+    Left = 63
+    Top = 8
+    Width = 6
+    Height = 13
+    Caption = 'x'
+  end
+  object LabelSquaresLeft: TLabel
+    Left = 136
+    Top = 8
+    Width = 61
+    Height = 13
+    Caption = 'Squares Left'
+  end
+  object LabelSquaresLeftValue: TLabel
+    Left = 203
+    Top = 8
+    Width = 6
+    Height = 13
+    Caption = 'x'
+  end
+  object StringGrid: TStringGrid
+    Left = 8
+    Top = 39
+    Width = 633
+    Height = 636
+    ColCount = 30
+    DefaultColWidth = 20
+    DefaultRowHeight = 20
+    FixedCols = 0
+    RowCount = 30
+    FixedRows = 0
+    TabOrder = 0
+    ColWidths = (
+      20
+      20
+      20
+      20
+      20
+      20
+      20
+      20
+      20
+      20
+      20
+      20
+      20
+      20
+      20
+      20
+      20
+      20
+      20
+      20
+      20
+      20
+      20
+      20
+      20
+      20
+      20
+      20
+      20
+      20)
+    RowHeights = (
+      20
+      20
+      20
+      20
+      20
+      20
+      20
+      20
+      20
+      20
+      20
+      20
+      20
+      20
+      20
+      20
+      20
+      20
+      20
+      20
+      20
+      20
+      20
+      20
+      20
+      20
+      20
+      20
+      20
+      20)
+  end
+  object ButtonFlag: TButton
+    Left = 566
+    Top = 8
+    Width = 75
+    Height = 25
+    Caption = 'Flag'
+    TabOrder = 1
+  end
+  object ButtonReveal: TButton
+    Left = 485
+    Top = 8
+    Width = 75
+    Height = 25
+    Caption = 'Reveal'
+    Enabled = False
+    TabOrder = 2
+  end
+end

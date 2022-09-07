@@ -1,0 +1,203 @@
+unit UMinesweeper;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
+  System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.Grids, Vcl.StdCtrls;
+
+type
+  TMinesweeper = class(TForm)
+    LabelMinesLeft: TLabel;
+    LabelMinesLeftValue: TLabel;
+    LabelSquaresLeft: TLabel;
+    LabelSquaresLeftValue: TLabel;
+    StringGrid: TStringGrid;
+    ButtonFlag: TButton;
+    ButtonReveal: TButton;
+    procedure FormCreate(Sender: TObject);
+    procedure ButtonFlagClick(Sender: TObject);
+    procedure ButtonRevealClick(Sender: TObject);
+    procedure CellSelect(Sender: TObject; ACol, ARow: Integer;
+      var CanSelect: Boolean);
+    procedure OnDrawCell(Sender: TObject; ACol, ARow: Integer; Rect: TRect;
+      State: TGridDrawState);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    MinesLeft, SquaresLeft, Row, Column: Integer;
+    FlagButton: Boolean;
+    MinesValues: array [0 .. 29, 0 .. 29] of char;
+  end;
+
+var
+  Minesweeper: TMinesweeper;
+
+implementation
+
+{$R *.dfm}
+
+procedure TMinesweeper.ButtonFlagClick(Sender: TObject);
+begin
+  FlagButton := true;
+  ButtonFlag.Enabled := false;
+  ButtonReveal.Enabled := true;
+end;
+
+procedure TMinesweeper.ButtonRevealClick(Sender: TObject);
+begin
+  FlagButton := false;
+  ButtonFlag.Enabled := true;
+  ButtonReveal.Enabled := false;
+end;
+
+procedure TMinesweeper.CellSelect(Sender: TObject; ACol, ARow: Integer;
+  var CanSelect: Boolean);
+begin
+  if FlagButton = false then
+  begin
+   Row := ARow;
+   Column := ACol;
+  end;
+end;
+
+procedure TMinesweeper.FormCreate(Sender: TObject);
+var
+  Row, Column, MinesLeft, I, CellTotal: Integer;
+  ArrayValue: char;
+begin
+  MinesLeft := 100;
+  LabelMinesLeftValue.Caption := inttostr(MinesLeft);
+  SquaresLeft := 900;
+  LabelSquaresLeftValue.Caption := inttostr(SquaresLeft);
+  FlagButton := false;
+  // MINE GENERATION
+  for I := 1 to 900 do
+  begin
+    if MinesLeft = 0 then
+      MinesLeft := 0;
+    if MinesLeft > 0 then
+    begin
+      Row := random(30);
+      Column := random(30);
+      if StringGrid.Cells[Row, Column] <> 'm' then
+      begin
+        MinesLeft := MinesLeft - 1;
+        StringGrid.Cells[Row, Column] := 'm';
+      end;
+    end;
+  end;
+  // NUMBERS ASSIGNMENT
+  for Row := 0 to 29 do
+  begin
+    for Column := 0 to 29 do
+    begin
+      CellTotal := 0;
+      if (Row <> 0) and (Column <> 0) then
+      begin
+        if StringGrid.Cells[Row - 1, Column - 1] = 'm' then
+          CellTotal := CellTotal + 1;
+        if StringGrid.Cells[Row - 1, Column] = 'm' then
+          CellTotal := CellTotal + 1;
+        if StringGrid.Cells[Row - 1, Column + 1] = 'm' then
+          CellTotal := CellTotal + 1;
+        if StringGrid.Cells[Row, Column - 1] = 'm' then
+          CellTotal := CellTotal + 1;
+        if StringGrid.Cells[Row, Column + 1] = 'm' then
+          CellTotal := CellTotal + 1;
+        if StringGrid.Cells[Row + 1, Column - 1] = 'm' then
+          CellTotal := CellTotal + 1;
+        if StringGrid.Cells[Row + 1, Column] = 'm' then
+          CellTotal := CellTotal + 1;
+        if StringGrid.Cells[Row + 1, Column + 1] = 'm' then
+          CellTotal := CellTotal + 1;
+      end;
+      if (Row = 0) and (Column <> 0) then
+      begin
+        if StringGrid.Cells[Row, Column - 1] = 'm' then
+          CellTotal := CellTotal + 1;
+        if StringGrid.Cells[Row, Column + 1] = 'm' then
+          CellTotal := CellTotal + 1;
+        if StringGrid.Cells[Row + 1, Column - 1] = 'm' then
+          CellTotal := CellTotal + 1;
+        if StringGrid.Cells[Row + 1, Column] = 'm' then
+          CellTotal := CellTotal + 1;
+        if StringGrid.Cells[Row + 1, Column + 1] = 'm' then
+          CellTotal := CellTotal + 1;
+      end;
+      if (Row <> 0) and (Column = 0) then
+      begin
+        if StringGrid.Cells[Row - 1, Column] = 'm' then
+          CellTotal := CellTotal + 1;
+        if StringGrid.Cells[Row - 1, Column + 1] = 'm' then
+          CellTotal := CellTotal + 1;
+        if StringGrid.Cells[Row, Column + 1] = 'm' then
+          CellTotal := CellTotal + 1;
+        if StringGrid.Cells[Row + 1, Column] = 'm' then
+          CellTotal := CellTotal + 1;
+        if StringGrid.Cells[Row + 1, Column + 1] = 'm' then
+          CellTotal := CellTotal + 1;
+      end;
+      if (Row = 0) and (Column = 0) then
+      begin
+        if StringGrid.Cells[Row, Column + 1] = 'm' then
+          CellTotal := CellTotal + 1;
+        if StringGrid.Cells[Row + 1, Column] = 'm' then
+          CellTotal := CellTotal + 1;
+        if StringGrid.Cells[Row + 1, Column + 1] = 'm' then
+          CellTotal := CellTotal + 1;
+      end;
+      if CellTotal <> 0 then
+      begin
+        if StringGrid.Cells[Row, Column] <> 'm' then
+          StringGrid.Cells[Row, Column] := inttostr(CellTotal);
+      end;
+    end;
+  end;
+  // SETTING COLOUR OF CELLS
+
+  // CREATION OF ARRAY
+  for Row := 0 to 29 do
+    for Column := 0 to 29 do
+    begin
+      if StringGrid.Cells[Row, Column] = '' then
+        ArrayValue := 'o';
+      if StringGrid.Cells[Row, Column] = '1' then
+        ArrayValue := 'a';
+      if StringGrid.Cells[Row, Column] = '2' then
+        ArrayValue := 'b';
+      if StringGrid.Cells[Row, Column] = '3' then
+        ArrayValue := 'c';
+      if StringGrid.Cells[Row, Column] = '4' then
+        ArrayValue := 'd';
+      if StringGrid.Cells[Row, Column] = '5' then
+        ArrayValue := 'e';
+      if StringGrid.Cells[Row, Column] = '6' then
+        ArrayValue := 'f';
+      if StringGrid.Cells[Row, Column] = '7' then
+        ArrayValue := 'g';
+      if StringGrid.Cells[Row, Column] = '8' then
+        ArrayValue := 'h';
+      if StringGrid.Cells[Row, Column] = 'm' then
+        ArrayValue := 'm';
+      MinesValues[Row, Column] := ArrayValue;
+    end;
+
+end;
+
+procedure TMinesweeper.OnDrawCell(Sender: TObject; ACol, ARow: Integer;
+  Rect: TRect; State: TGridDrawState);
+begin
+StringGrid.Canvas.Brush.Color := ClGray;
+StringGrid.Canvas.FillRect(Rect);
+if (ARow = Row) and (ACol = Column) then
+begin
+  StringGrid.Canvas.Brush.Color := ClSilver;
+  StringGrid.Canvas.FillRect(Rect);
+end;
+
+end;
+
+end.

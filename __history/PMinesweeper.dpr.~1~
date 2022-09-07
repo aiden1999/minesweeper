@@ -1,0 +1,14 @@
+program PMinesweeper;
+
+uses
+  Vcl.Forms,
+  UMinesweeper in 'UMinesweeper.pas' {Form1};
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.MainFormOnTaskbar := True;
+  Application.CreateForm(TForm1, Form1);
+  Application.Run;
+end.
